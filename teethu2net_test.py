@@ -40,8 +40,8 @@ class TestModel:
         self.batch_size_train = config['batch_size']
         self.root_dir = ""
 
-        self.prediction_dir = os.path.join(self.root_dir, "test_data", self.model_name + "_results" + os.sep)
-        image_dir = os.path.join(self.root_dir, config['data_folder_name'], "test_images")
+        self.prediction_dir = os.path.join(self.root_dir, "test_data", self.model_name + "Masks_results" + os.sep)
+        image_dir = os.path.join(self.root_dir, config['data_folder_name'], "Images")
         self.img_name_list = glob.glob(image_dir + os.sep + "*")
         teeth_dataset = Teeth_dataloader(img_name_list=self.img_name_list, lbl_name_list=[],
                                          transform=transforms.Compose([RescaleT(config['input_size']),
