@@ -50,7 +50,7 @@ def CCA_Analysis(orig_image, predict_image, erode_iteration, open_iteration):
         box = cv2.boxPoints(rect)
         box = np.array(box, dtype="int")
         box = perspective.order_points(box)
-        color1 =  (0,255,0)#(list(np.random.choice(range(150), size=3)))
+        color1 =  (list(np.random.choice(range(150), size=3)))
         color = [int(color1[0]), int(color1[1]), int(color1[2])]
         cv2.drawContours(image2, [box.astype("int")], 0, color, 4)
         (tl, tr, br, bl) = box
@@ -80,7 +80,7 @@ def CCA_Analysis(orig_image, predict_image, erode_iteration, open_iteration):
 
 
 
-dir_path = "/home/gaurav/Projects/medical/TeethU2Net/results"
+dir_path = "/home/gaurav/Projects/medical/TeethU2Net/test_data"
 output = './Result'
 os.makedirs(output , exist_ok = True)
 def convert_one_channel(img):
