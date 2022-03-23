@@ -72,7 +72,7 @@ class Model_Train():
         self.writer = SummaryWriter(self.log_dir)
 
         # ------- 2. set the directory of training dataset --------
-        data_dir = os.path.join(self.root_dir, "train_data" + os.sep)
+        data_dir = os.path.join(self.root_dir, config['data_folder_name'] + os.sep)
         tra_image_dir = os.path.join("images" + os.sep)
         tra_label_dir = os.path.join("labels" + os.sep)
         image_ext = ".jpg"
@@ -95,9 +95,9 @@ class Model_Train():
         print("train labels: ", len(tra_lbl_name_list))
         print("---")
         self.train_num = len(tra_img_name_list)
-        salobj_dataset = Teeth_dataloader(img_name_list=tra_img_name_list, lbl_name_list=tra_lbl_name_list,
+        teeth_dataloader = Teeth_dataloader(img_name_list=tra_img_name_list, lbl_name_list=tra_lbl_name_list,
                                        transform=transforms.Compose([RescaleT(config['input_size']), ToTensorLab(flag=0)]), )
-        self.salobj_dataloader = DataLoader(salobj_dataset, batch_size=self.batch_size_train, shuffle=True , num_workers=config['num_workers'])
+        self.teeth_dataloader = DataLoader(teeth_dataloader, batch_size=self.batch_size_train, shuffle=True , num_workers=config['num_workers'])
         self.model = Teeth_U2NET(config['input_channels'], config['num_classes'])
 
         params = filter(lambda p: p.requires_grad, self.model.parameters())
