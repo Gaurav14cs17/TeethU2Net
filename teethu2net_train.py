@@ -39,8 +39,8 @@ def parse_args():
     parser.add_argument('--data_folder_name', default='train_data', help='data_folder_name')
 
     # optimizer
-    parser.add_argument('--optimizer', default='SGD', choices=['Adam', 'SGD'],help='loss: ' + ' | '.join(['Adam', 'SGD']) + ' (default: Adam)')
-    parser.add_argument('--lr', '--learning_rate', default=1e-3, type=float, metavar='LR', help='initial learning rate')
+    parser.add_argument('--optimizer', default='Adam', choices=['Adam', 'SGD'],help='loss: ' + ' | '.join(['Adam', 'SGD']) + ' (default: Adam)')
+    parser.add_argument('--lr', '--learning_rate', default=0.001, type=float, metavar='LR', help='initial learning rate')
     parser.add_argument('--nesterov', default=False, type=str2bool, help='nesterov')
     parser.add_argument('--momentum', default=0.9, type=float, help='momentum')
     parser.add_argument('--weight_decay', default=1e-4, type=float, help='weight decay')
@@ -102,10 +102,9 @@ class Model_Train():
 
         params = filter(lambda p: p.requires_grad, self.model.parameters())
         if config['optimizer'] == 'Adam':
-            self.optimizer = optim.Adam(params, lr=config['lr'], weight_decay=config['weight_decay'])
+            self.optimizer = optim.Adam(params, lr=config['lr'], betas=(0.9, 0.999), eps=1e-08,weight_decay=0, ) #weight_decay=config['weight_decay'])
         elif config['optimizer'] == 'SGD':
-            self.optimizer = optim.SGD(params, lr=config['lr'], momentum=config['momentum'], nesterov=config['nesterov'],
-                                  weight_decay=config['weight_decay'])
+            self.optimizer = optim.SGD(params, lr=config['lr'], momentum=config['momentum'], nesterov=config['nesterov'],weight_decay=config['weight_decay'])
         else:
             raise NotImplementedError
 

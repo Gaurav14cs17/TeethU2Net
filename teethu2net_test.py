@@ -17,10 +17,8 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--name', default='TeethNet', help='model name')
     parser.add_argument('-b', '--batch_size', default=1, type=int, metavar='N', help='mini-batch size (default: 16)')
-    parser.add_argument('-t', '--threshold_value', default=0.95, help='threshold_value')
-    parser.add_argument('-m', '--model_path',
-                        default='/home/gaurav/Projects/medical/TeethU2Net/saved_models/u2net/TeethNet_159_bce_itr_22000_train_0.549952_tar_0.026701.pth')
-
+    parser.add_argument('-t', '--threshold_value', default=0.99, help='threshold_value')
+    parser.add_argument('-m', '--model_path',default='/home/gaurav/Projects/medical/TeethU2Net/saved_models/u2net/TeethNet_159_bce_itr_22000_train_0.549952_tar_0.026701.pth')
     parser.add_argument('--input_channels', default=3, type=int, help='input channels')
     parser.add_argument('--num_classes', default=1, type=int, help='number of classes')
     parser.add_argument('--input_size', default=800, type=int, help='image size')
