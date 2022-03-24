@@ -157,7 +157,7 @@ class Model_Train():
 
         while self.epoch < self.epoch_num:
             self.model.train()
-            for i, data in enumerate(self.salobj_dataloader):
+            for i, data in enumerate(self.teeth_dataloader):
                 ite_num = ite_num + 1
                 ite_num4val = ite_num4val + 1
                 inputs, labels = data["image"], data["label"]
