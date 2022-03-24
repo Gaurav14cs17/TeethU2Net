@@ -16,7 +16,7 @@ from model.teeth_U2NET import Teeth_U2NET
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--name', default='TeethNet', help='model name')
-    parser.add_argument('-b', '--batch_size', default=2, type=int, metavar='N', help='mini-batch size (default: 16)')
+    parser.add_argument('-b', '--batch_size', default=1, type=int, metavar='N', help='mini-batch size (default: 16)')
     parser.add_argument('-t', '--threshold_value', default=0.95, help='threshold_value')
     parser.add_argument('-m', '--model_path',
                         default='/home/gaurav/Projects/medical/TeethU2Net/saved_models/u2net/TeethNet_159_bce_itr_22000_train_0.549952_tar_0.026701.pth')
@@ -68,7 +68,7 @@ class TestModel:
         predict_np = predict.cpu().data.numpy()
         predict_np[predict_np >= self.threshold_value] = 1
         predict_np[predict_np < self.threshold_value] = 0
-        print(predict_np.shape)
+        #print(predict_np.shape)
         im = Image.fromarray(predict_np * 255).convert("RGB")
         img_name = image_name.split(os.sep)[-1]
         image = io.imread(image_name)
