@@ -19,11 +19,11 @@ def parse_args():
     parser.add_argument('-b', '--batch_size', default=2, type=int, metavar='N', help='mini-batch size (default: 16)')
     parser.add_argument('-t', '--threshold_value', default=0.95, help='threshold_value')
     parser.add_argument('-m', '--model_path',
-                        default='/home/gaurav/Projects/medical/U-2-Net/saved_models/u2net/u2net_519_bce_itr_28000_train_6.231496_tar_0.884179.pth')
+                        default='/home/gaurav/Projects/medical/TeethU2Net/saved_models/u2net/TeethNet_159_bce_itr_22000_train_0.549952_tar_0.026701.pth')
 
     parser.add_argument('--input_channels', default=3, type=int, help='input channels')
     parser.add_argument('--num_classes', default=1, type=int, help='number of classes')
-    parser.add_argument('--input_size', default=256, type=int, help='image size')
+    parser.add_argument('--input_size', default=800, type=int, help='image size')
 
     parser.add_argument('--data_folder_name', default='test_data', help='data_folder_name')
     parser.add_argument('--num_workers', default=4, type=int)
@@ -36,13 +36,13 @@ class TestModel:
         self.threshold_value = config['threshold_value']
 
         self.model_name = config['name']
-        self.epoch_num = config['epochs']
         self.batch_size_train = config['batch_size']
         self.root_dir = ""
 
         self.prediction_dir = os.path.join(self.root_dir, "Results", self.model_name + "Masks_results" + os.sep)
         image_dir = os.path.join(self.root_dir, config['data_folder_name'], "Images")
         self.img_name_list = glob.glob(image_dir + os.sep + "*")
+        #print(self.img_name_list)
         teeth_dataset = Teeth_dataloader(img_name_list=self.img_name_list, lbl_name_list=[],
                                          transform=transforms.Compose([RescaleT(config['input_size']),
                                                                        ToTensorLab(flag=0)]), )
@@ -68,9 +68,9 @@ class TestModel:
         predict_np = predict.cpu().data.numpy()
         predict_np[predict_np >= self.threshold_value] = 1
         predict_np[predict_np < self.threshold_value] = 0
+        print(predict_np.shape)
         im = Image.fromarray(predict_np * 255).convert("RGB")
         img_name = image_name.split(os.sep)[-1]
-        print(image_name)
         image = io.imread(image_name)
         imo = im.resize((image.shape[1], image.shape[0]), Image.ANTIALIAS)
         # pb_np = np.array(imo)
