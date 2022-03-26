@@ -90,7 +90,6 @@ def get_mcc(groundtruth_list, predicted_list):
     """
     _assert_valid_lists(groundtruth_list, predicted_list)
     tn, fp, fn, tp = get_confusion_matrix_elements(groundtruth_list, predicted_list)
-
     if _all_class_0_predicted_as_class_0(groundtruth_list, predicted_list) is True:
         mcc = 1
     elif _all_class_1_predicted_as_class_1(groundtruth_list, predicted_list) is True:
@@ -102,10 +101,16 @@ def get_mcc(groundtruth_list, predicted_list):
     elif _mcc_denominator_zero(tn, fp, fn, tp) is True:
         mcc = -1
     else:
-        mcc = ((tp * tn) - (fp * fn)) / (
-            np.sqrt((tp + fp) * (tp + fn) * (tn + fp) * (tn + fn)))
+        mcc = ((tp * tn) - (fp * fn)) / (np.sqrt((tp + fp) * (tp + fn) * (tn + fp) * (tn + fn)))
 
-    return mcc
+    mat_dict = {
+        "tn" : tn,
+        "fp" : fp,
+        "fn" : fn,
+        "tp" : tp
+    }
+
+    return mcc , mat_dict
 
 
 def get_accuracy(groundtruth_list, predicted_list):
@@ -135,7 +140,8 @@ def get_validation_metrics(groundtruth_list, predicted_list):
     validation_metrics = {}
     validation_metrics["accuracy"] = get_accuracy(groundtruth_list, predicted_list)
     validation_metrics["f1_score"] = get_f1_score(groundtruth_list, predicted_list)
-    validation_metrics["mcc"] = get_mcc(groundtruth_list, predicted_list)
+    validation_metrics["mcc"]  , confusion_matrix = get_mcc(groundtruth_list, predicted_list)
+    validation_metrics["confusion_matrix"] = confusion_matrix
     return validation_metrics
 
 
@@ -144,15 +150,12 @@ def get_confusion_matrix_intersection_mats(groundtruth, predicted):
     Returns a dictionary of 4 boolean numpy arrays containing True at TP, FP, FN, TN.
     """
     confusion_matrix_arrs = {}
-
     groundtruth_inverse = np.logical_not(groundtruth)
     predicted_inverse = np.logical_not(predicted)
-
     confusion_matrix_arrs["tp"] = np.logical_and(groundtruth, predicted)
     confusion_matrix_arrs["tn"] = np.logical_and(groundtruth_inverse, predicted_inverse)
     confusion_matrix_arrs["fp"] = np.logical_and(groundtruth_inverse, predicted)
     confusion_matrix_arrs["fn"] = np.logical_and(groundtruth, predicted_inverse)
-
     return confusion_matrix_arrs
 
 
