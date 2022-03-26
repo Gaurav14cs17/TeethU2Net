@@ -80,7 +80,7 @@ def parse_args():
 
     parser.add_argument('--data_folder_name', default='test_data_92', help='data_folder_name')
     parser.add_argument('--onnx_flag' , default= False , type=bool , help='onnx')
-    parser.add_argument('--maxtrix_flag', default=True, type=bool, help='maxtrix_flag')
+    parser.add_argument('--maxtrix_flag', default=False, type=bool, help='maxtrix_flag')
     parser.add_argument('--num_workers', default=4, type=int)
     config = parser.parse_args()
     return config
@@ -191,25 +191,32 @@ class TestModel:
             # normalization
             pred = d1[:, 0, :, :]
 
-            if  self.maxtrix_flag :
-                Acc += accuracy_score(pred.cpu().data.numpy(), gt.cpu().data.numpy())
-                mat =  numeric_score(pred.cpu().data.numpy(), gt.cpu().data.numpy())
-                FP += mat[0]
-                FN += mat[1]
-                TP += mat[2]
-                TN += mat[3]
+            # if  self.maxtrix_flag :
+            #     predict = pred.squeeze()
+            #     predict_np = predict.cpu().data.numpy()
+            #     predict_np[predict_np >= self.threshold_value] = 1
+            #     predict_np[predict_np < self.threshold_value] = 0
+            #     # print(predict_np.shape)
+            #     pred = Image.fromarray(predict_np * 255).convert("RGB")
+            #
+            #     Acc += accuracy_score(pred.cpu().data.numpy(), gt.cpu().data.numpy())
+            #     mat =  numeric_score(pred.cpu().data.numpy(), gt.cpu().data.numpy())
+            #     FP += mat[0]
+            #     FN += mat[1]
+            #     TP += mat[2]
+            #     TN += mat[3]
             pred = self.normPRED(pred)
             # save results to test_results folder
             if not os.path.exists(self.prediction_dir):
                 os.makedirs(self.prediction_dir, exist_ok=True)
             self.save_output(self.img_name_list[i_test], pred, self.prediction_dir , i_test )
             del d1, d2, d3, d4, d5, d6, d7
-        if  self.maxtrix_flag:
-            print('Acc : %.2f' % (Acc / self.data_len))
-            print('FP  :  %.2f' % (FP / self.data_len))
-            print('FN  :  %.2f' % (FN / self.data_len))
-            print('TP  :  %.2f' % (TP / self.data_len))
-            print('TN  :  %.2f' % (TN / self.data_len))
+        # if  self.maxtrix_flag:
+        #     print('Acc : %.2f' % (Acc / self.data_len))
+        #     print('FP  :  %.2f' % (FP / self.data_len))
+        #     print('FN  :  %.2f' % (FN / self.data_len))
+        #     print('TP  :  %.2f' % (TP / self.data_len))
+        #     print('TN  :  %.2f' % (TN / self.data_len))
 
 
 if __name__ == "__main__":
