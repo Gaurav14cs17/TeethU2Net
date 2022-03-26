@@ -16,6 +16,15 @@ import numpy as np
 from scipy import spatial
 
 
+from sklearn.metrics import accuracy_score, precision_score,recall_score,f1_score
+def metrics(preds,label):
+    accuracy = accuracy_score ( preds, label )
+    precision = precision_score(preds,label,average='macro')
+    recall = recall_score ( preds, label, average='macro' )
+    f1 = f1_score(preds, label)
+    return accuracy, precision, recall, f1
+
+
 def dice_coeff(im1, im2, empty_score=1.0):
     """Calculates the dice coefficient for the images"""
     im1 = np.asarray(im1).astype(np.bool)
@@ -53,6 +62,8 @@ def accuracy_score(prediction, groundtruth):
     N = FP + FN + TP + TN
     accuracy = np.divide(TP + TN, N)
     return accuracy * 100.0
+
+
 
 
 def parse_args():
@@ -195,10 +206,10 @@ class TestModel:
             del d1, d2, d3, d4, d5, d6, d7
         if  self.maxtrix_flag:
             print('Acc : %.2f' % (Acc / self.data_len))
-            print('FP :  %.2f' % (FP / self.data_len))
-            print('FN :  %.2f' % (FN / self.data_len))
-            print('TP :  %.2f' % (TP / self.data_len))
-            print('TN :  %.2f' % (TN / self.data_len))
+            print('FP  :  %.2f' % (FP / self.data_len))
+            print('FN  :  %.2f' % (FN / self.data_len))
+            print('TP  :  %.2f' % (TP / self.data_len))
+            print('TN  :  %.2f' % (TN / self.data_len))
 
 
 if __name__ == "__main__":
