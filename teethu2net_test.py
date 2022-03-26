@@ -18,12 +18,13 @@ def parse_args():
     parser.add_argument('--name', default='TeethNet', help='model name')
     parser.add_argument('-b', '--batch_size', default=1, type=int, metavar='N', help='mini-batch size (default: 16)')
     parser.add_argument('-t', '--threshold_value', default=0.99, help='threshold_value')
-    parser.add_argument('-m', '--model_path',default='/home/gaurav/Projects/medical/TeethU2Net/saved_models/u2net/TeethNet_159_bce_itr_22000_train_0.549952_tar_0.026701.pth')
+    parser.add_argument('-m', '--model_path',default='/home/gaurav/Projects/medical/TeethU2Net/saved_models/u2net/TeethNet_579_bce_itr_80000_train_0.472222_tar_0.016793.pth')
+
     parser.add_argument('--input_channels', default=3, type=int, help='input channels')
     parser.add_argument('--num_classes', default=1, type=int, help='number of classes')
     parser.add_argument('--input_size', default=800, type=int, help='image size')
 
-    parser.add_argument('--data_folder_name', default='test_data', help='data_folder_name')
+    parser.add_argument('--data_folder_name', default='test_data_92', help='data_folder_name')
     parser.add_argument('--num_workers', default=4, type=int)
     config = parser.parse_args()
     return config
@@ -80,7 +81,7 @@ class TestModel:
         print(d_dir, imidx)
         imo.save(d_dir + imidx + ".png", quality=1000)
 
-    def model_inf(self):
+    def model_inf(self , onnx_flag = False):
         # --------- 4. inference for each image ---------
         print("=== 04. Convert an image to an image list. ===")
         for i_test, data_test in enumerate(self.teeth_dataloader):
@@ -90,6 +91,22 @@ class TestModel:
                 inputs_test = Variable(inputs_test.cuda())
             else:
                 inputs_test = Variable(inputs_test)
+
+            if onnx_flag:
+                torch.onnx.export(self.model,  # model being run
+                                  inputs_test,  # model input (or a tuple for multiple inputs)
+                                  "teeth_net.onnx",
+                                  # where to save the model (can be a file or file-like object)
+                                  export_params=True,  # store the trained parameter weights inside the model file
+                                  opset_version=10,  # the ONNX version to export the model to
+                                  do_constant_folding=True,  # whether to execute constant folding for optimization
+                                  input_names=['input'],  # the model's input names
+                                  output_names=['output'],  # the model's output names
+                                  dynamic_axes={'input': {0: 'batch_size'},  # variable length axes
+                                                'output': {0: 'batch_size'}})
+                print('onnx done')
+                exit()
+
             d1, d2, d3, d4, d5, d6, d7 = self.model(inputs_test, test=True)
             # normalization
             pred = d1[:, 0, :, :]
