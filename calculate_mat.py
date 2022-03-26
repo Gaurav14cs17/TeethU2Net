@@ -186,7 +186,16 @@ gt_path = "/home/gaurav/Projects/medical/TeethU2Net/test_data_92/gt_masks"
 mask_paths = "/home/gaurav/Projects/medical/TeethU2Net/Results/TeethNetMasks_results"
 
 
-
+mat_dict = {
+    "accuracy" : 0,
+    "f1_score" : 0,
+    "mcc" : 0 ,
+    "tn" : 0,
+    "fp" : 0,
+    "fn" : 0,
+    "tp" : 0
+}
+total_data = len(os.listdir(gt_path))
 for image_name in os.listdir(gt_path):
     gt_image_path = os.path.join(gt_path , image_name)
     mask_path = os.path.join(mask_paths , image_name.replace('.bmp' ,'.png'))
@@ -199,7 +208,21 @@ for image_name in os.listdir(gt_path):
     groundtruth_list = (groundtruth_scaled).flatten().tolist()
     predicted_list = (predicted_scaled).flatten().tolist()
     validation_metrics = get_validation_metrics(groundtruth_list, predicted_list)
+    mat_dict["accuracy"] += validation_metrics['accuracy']
+    mat_dict['f1_score'] += validation_metrics['f1_score']
+    mat_dict['mcc'] += validation_metrics['mcc']
+
+    mat_dict['tn'] += validation_metrics['confusion_matrix']['tn']
+    mat_dict['fp'] += validation_metrics['confusion_matrix']['fp']
+    mat_dict['fn'] += validation_metrics['confusion_matrix']['fn']
+    mat_dict['tp'] += validation_metrics['confusion_matrix']['tp']
+
 
     print("Validation Metrics comparing Otsu and ground truth")
     print(validation_metrics)
 
+results = dict()
+for key, value in mat_dict.items():
+    results[key] = value/total_data
+
+print(results)
