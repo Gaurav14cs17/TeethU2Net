@@ -11,10 +11,7 @@ from data_loader import RescaleT
 from data_loader import ToTensorLab
 from data_loader import Teeth_dataloader
 from model.teeth_U2NET import Teeth_U2NET
-
 import numpy as np
-from scipy import spatial
-
 
 from sklearn.metrics import accuracy_score, precision_score,recall_score,f1_score
 def metrics(preds,label):

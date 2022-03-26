@@ -1,8 +1,9 @@
 import cv2
 import sklearn.metrics
-import warnings
+
+
+
 #https://www.kite.com/blog/python/image-segmentation-tutorial/
-warnings.simplefilter('ignore')
 
 
 
@@ -167,13 +168,11 @@ def get_confusion_matrix_overlaid_mask(image, groundtruth, predicted, alpha, col
     image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
     masks = get_confusion_matrix_intersection_mats(groundtruth, predicted)
     color_mask = np.zeros_like(image)
-
     for label, mask in masks.items():
         color = colors[label]
         mask_rgb = np.zeros_like(image)
         mask_rgb[mask != 0] = color
         color_mask += mask_rgb
-
     return cv2.addWeighted(image, alpha, color_mask, 1 - alpha, 0)
 
 
