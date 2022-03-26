@@ -186,11 +186,6 @@ gt_path = "/home/gaurav/Projects/medical/TeethU2Net/test_data_92/gt_masks"
 mask_paths = "/home/gaurav/Projects/medical/TeethU2Net/Results/TeethNetMasks_results"
 
 
-def get_array(arr):
-    shape = arr.shape
-    flat_arr = arr.ravel()
-    vector = np.matrix(flat_arr)
-    return vector
 
 for image_name in os.listdir(gt_path):
     gt_image_path = os.path.join(gt_path , image_name)
