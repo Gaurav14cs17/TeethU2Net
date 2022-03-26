@@ -80,6 +80,7 @@ class Model_Train():
         self.model_dir = os.path.join(self.root_dir, config['data_folder_name'], self.model_name + os.sep)
         os.makedirs(self.model_dir, exist_ok=True)
         tra_img_name_list = glob.glob(data_dir + tra_image_dir + "*" + image_ext)
+
         tra_lbl_name_list = []
         for img_path in tra_img_name_list:
             img_name = img_path.split(os.sep)[-1]
