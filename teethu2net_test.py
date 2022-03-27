@@ -105,20 +105,20 @@ class TestModel:
         else:
             self.cuda_flag = False
 
-        tra_lbl_name_list = []
-        for img_path in self.img_name_list:
-            img_name = img_path.split(os.sep)[-1]
-            aaa = img_name.split(".")
-            bbb = aaa[0:-1]
-            imidx = bbb[0]
-            for i in range(1, len(bbb)):
-                imidx = imidx + "." + bbb[i]
-            tra_lbl_name_list.append( os.path.join(self.root_dir , config['data_folder_name'] , tra_label_dir , imidx + label_ext))
+        # tra_lbl_name_list = []
+        # for img_path in self.img_name_list:
+        #     img_name = img_path.split(os.sep)[-1]
+        #     aaa = img_name.split(".")
+        #     bbb = aaa[0:-1]
+        #     imidx = bbb[0]
+        #     for i in range(1, len(bbb)):
+        #         imidx = imidx + "." + bbb[i]
+        #     tra_lbl_name_list.append( os.path.join(self.root_dir , config['data_folder_name'] , tra_label_dir , imidx + label_ext))
 
         # print(len(self.img_name_list))
         #print(len(tra_lbl_name_list) , tra_lbl_name_list)
-        self.data_len = len(tra_lbl_name_list)
-        teeth_dataset = Teeth_dataloader(img_name_list=self.img_name_list, lbl_name_list=tra_lbl_name_list,
+        #self.data_len = len(tra_lbl_name_list)
+        teeth_dataset = Teeth_dataloader(img_name_list=self.img_name_list, lbl_name_list=[],
                                          transform=transforms.Compose([RescaleT(config['input_size']),
                                                                        ToTensorLab(flag=0)]), )
 
