@@ -1,8 +1,5 @@
 import cv2
 import sklearn.metrics
-
-
-
 #https://www.kite.com/blog/python/image-segmentation-tutorial/
 
 

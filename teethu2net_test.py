@@ -78,6 +78,7 @@ def parse_args():
     parser.add_argument('--data_folder_name', default='test_data_92', help='data_folder_name')
     parser.add_argument('--onnx_flag' , default= False , type=bool , help='onnx')
     parser.add_argument('--maxtrix_flag', default=False, type=bool, help='maxtrix_flag')
+    parser.add_argument('--gpu', default=False, type=bool, help='gpu')
     parser.add_argument('--num_workers', default=4, type=int)
     config = parser.parse_args()
     return config
@@ -99,6 +100,10 @@ class TestModel:
 
         tra_label_dir = os.path.join("gt_masks" + os.sep)
         label_ext = ".bmp"
+        if config['gpu']:
+            self.cuda_flag = torch.cuda.is_available()
+        else:
+            self.cuda_flag = False
 
         tra_lbl_name_list = []
         for img_path in self.img_name_list:
@@ -122,7 +127,7 @@ class TestModel:
         self.model = Teeth_U2NET(config['input_channels'], config['num_classes'])
         checkpoint = torch.load(config['model_path'], map_location=torch.device('cpu'))
         self.model.load_state_dict(checkpoint["model_state_dict"])
-        if not torch.cuda.is_available():
+        if self.cuda_flag:
             self.model.cuda()
         self.model.eval()
 
@@ -162,7 +167,7 @@ class TestModel:
             inputs_test = data_test["image"]
             gt_labels = data_test["label"]
             inputs_test = inputs_test.type(torch.FloatTensor)
-            if torch.cuda.is_available() == False:
+            if self.cuda_flag:
                 inputs_test = Variable(inputs_test.cuda())
                 gt = Variable(gt_labels.cuda(), requires_grad=False)
             else:
