@@ -50,5 +50,3 @@ python test.py --input test_data/Images --output Result
 ---
 
 
-Do you want me to prepare it that way?
-```
